@@ -1,0 +1,3 @@
+#+TITLE: jakemacs
+
+Experiments in Emacs configurations. Ranging from very basic to very not basic.
