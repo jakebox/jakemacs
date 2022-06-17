@@ -28,6 +28,7 @@
 
 ;;; Visuals --------
 (set-face-attribute 'default nil :font "Roboto Mono" :height 140)
+(setq visible-bell t)
 
 (use-package modus-themes
   :init (modus-themes-load-themes)
@@ -43,28 +44,42 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-x C-r") 'counsel-recentf)
 
+(cua-mode 1)
+(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-S-f") 'swiper)
+
+(use-package undo-fu
+  :config
+  :bind (("C-z" . undo-fu-only-undo)
+         ("C-S-z" . undo-fu-only-redo)))
+
 ;;; Basics -----------
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq confirm-kill-emacs 'y-or-n-p)
 (setq scroll-conservatively 101) ;; Scroll screen with cursor
 (setq-default display-line-numbers-width 3)
-(fringe-mode '(8 . 8))
+;; (set-fringe-mode 15)
 (setq-default truncate-lines t)
 (setq-default tab-width 4)
 
 
-(recentf-mode 1)
+(recentf-mode)
 (show-paren-mode)
 (line-number-mode)
 (column-number-mode)
 (global-hl-line-mode)
 (global-display-line-numbers-mode t)
+(electric-pair-mode)
 
 
 ;; Packages
 (use-package ivy
   :config
   (ivy-mode 1))
+
+(use-package counsel
+  :config
+  (counsel-mode 1))
 
 (use-package org
   :hook (org-mode . visual-line-mode)
@@ -87,6 +102,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" default))
  '(package-selected-packages
    '(counsel ivy gcmh which-key use-package org-superstar modus-themes)))
 (custom-set-faces
