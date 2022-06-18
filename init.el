@@ -1,56 +1,51 @@
 ;; Jake's Super Simple Emacs init.el (jakemacs)
+;; includes evil.el (Vim emulation)
 
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-;;; Package setup
+;;; Package setup -----
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 (setq package-enable-at-startup nil)
-
-(dolist (package '(use-package))
-   (unless (package-installed-p package)
-       (package-install package)))
-
 (require 'use-package)
 (setq use-package-always-ensure t)
-(setq use-package-verbose nil)
-
-;;; Optimization
-(use-package gcmh
-  :config
-  (setq gcmh-idle-delay 5
-        gcmh-high-cons-threshold (* 16 1024 1024))  ; 16mb
-  (gcmh-mode 1))
 
 ;;; Visuals --------
-(set-face-attribute 'default nil :font "Roboto Mono" :height 140)
+(set-face-attribute 'default nil :font "Monaco" :height 140)
 
 (use-package modus-themes
   :init (modus-themes-load-themes)
   :config (modus-themes-load-operandi)
   (setq modus-themes-bold-constructs t)
-  :bind ("<f5>" . modus-themes-toggle))
-
+  :bind ("<f5>" . modus-themes-toggle)) ;; Press <f5> to toggle dark/light
 
 ;;; Keyboard --------
 (setq mac-command-modifier 'meta
-      mac-option-modifier nil)
+      mac-option-modifier  nil)
 
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C-x C-r") 'counsel-recentf)
 
+(use-package evil
+  :init
+  (setq evil-want-fine-undo t
+		evil-want-keybinding nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+  (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line))
+
 ;;; Basics -----------
-(fset 'yes-or-no-p 'y-or-n-p)
-(setq confirm-kill-emacs 'y-or-n-p)
-(setq scroll-conservatively 101) ;; Scroll screen with cursor
-(setq-default display-line-numbers-width 3)
-(fringe-mode '(8 . 8))
-(setq-default truncate-lines t)
-(setq-default tab-width 4)
+(setq use-short-answers t)					;; Use "y" and "n" rather than "yes" and "no"
+(setq scroll-conservatively 101)			;; Scroll screen with cursor
+(setq-default display-line-numbers-width 3) ;; Wider line numbers
+(fringe-mode '(8 . 8))						;; Window margin
+(setq-default truncate-lines t)				;; Don't wrap text by default
+(setq-default tab-width 4)					;; Tab width
+(setq visible-bell nil)						;; Make it ring (so no visible bell) (default)
+(setq ring-bell-function 'ignore)			;; BUT ignore it, so we see and hear nothing
 
 
 (recentf-mode 1)
@@ -62,9 +57,20 @@
 
 
 ;; Packages
+
+(use-package undo-fu
+  :config
+  (define-key evil-normal-state-map (kbd "u") 'undo-fu-only-undo)
+  (define-key evil-normal-state-map (kbd "U") 'undo-fu-only-redo))
+
+
 (use-package ivy
   :config
   (ivy-mode 1))
+
+(use-package counsel
+  :config
+  (counsel-mode 1))
 
 (use-package org
   :hook (org-mode . visual-line-mode)
