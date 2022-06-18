@@ -17,8 +17,10 @@
 
 (use-package modus-themes
   :init (modus-themes-load-themes)
-  :config (modus-themes-load-operandi)
-  (setq modus-themes-bold-constructs t)
+  :config
+  (setq modus-themes-bold-constructs t
+		modus-themes-mode-line '(accented 2 borderless))
+  (modus-themes-load-operandi)
   :bind ("<f5>" . modus-themes-toggle)) ;; Press <f5> to toggle dark/light
 
 ;;; Keyboard --------
@@ -40,13 +42,11 @@
 ;;; Basics -----------
 (setq use-short-answers t)					;; Use "y" and "n" rather than "yes" and "no"
 (setq scroll-conservatively 101)			;; Scroll screen with cursor
-(setq-default display-line-numbers-width 3) ;; Wider line numbers
 (fringe-mode '(8 . 8))						;; Window margin
 (setq-default truncate-lines t)				;; Don't wrap text by default
 (setq-default tab-width 4)					;; Tab width
 (setq visible-bell nil)						;; Make it ring (so no visible bell) (default)
 (setq ring-bell-function 'ignore)			;; BUT ignore it, so we see and hear nothing
-
 
 (recentf-mode 1)
 (show-paren-mode)
@@ -56,13 +56,11 @@
 (global-display-line-numbers-mode t)
 
 
-;; Packages
-
+;;; Packages ----------
 (use-package undo-fu
   :config
   (define-key evil-normal-state-map (kbd "u") 'undo-fu-only-undo)
   (define-key evil-normal-state-map (kbd "U") 'undo-fu-only-redo))
-
 
 (use-package ivy
   :config
@@ -80,13 +78,6 @@
   :hook (org-mode . org-superstar-mode)
   :config
   (setq org-superstar-leading-bullet ?\s))
-
-(use-package which-key
-  :init
-  (which-key-mode)
-  (which-key-setup-minibuffer)
-  :config
-  (setq which-key-idle-delay 0.3))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
